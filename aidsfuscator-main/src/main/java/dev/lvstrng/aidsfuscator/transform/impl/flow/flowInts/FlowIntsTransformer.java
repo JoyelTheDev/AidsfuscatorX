@@ -14,6 +14,7 @@ import dev.lvstrng.aidsfuscator.utils.SwitchUtils;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
@@ -28,6 +29,12 @@ public class FlowIntsTransformer extends Transformer {
     private final Setting<Boolean> obfuscateLongs = setting("obfuscateLongs", true);
     private final Setting<Boolean> separateBlocks  = setting("separateBlocks", true);
     private final Setting<Boolean> confuseFlow     = setting("confuseFlow", true);
+    private final Setting<Boolean> guardBranches   = setting("guardBranches", true);
+
+    private static final Set<Integer> INT_COMPARISON_OPCODES = Set.of(
+            IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE,
+            IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE
+    );
 
     public FlowIntsTransformer() {
         super("Flow Ints", "FlowIntsTransformer");
@@ -102,9 +109,34 @@ public class FlowIntsTransformer extends Transformer {
             method.insns().insert(block.label(), list);
 
             obfuscateBlockValues(context, method, block, variable, value);
+
+            if (guardBranches.value())
+                guardBranches(method, block, variable, value);
         }
 
         method.reinitUnsafeInstructions();
+    }
+
+    private void guardBranches(JMethod method, Block block, int variable, Integer value) {
+        if (value == null)
+            return;
+
+        for (var insn : new ArrayList<>(block.insns())) {
+            if (!(insn instanceof JumpInsnNode jump))
+                continue;
+            if (!INT_COMPARISON_OPCODES.contains(jump.getOpcode()))
+                continue;
+            if (method.isUnsafe(insn))
+                continue;
+
+            var guard = new InsnList();
+            guard.add(new VarInsnNode(ILOAD, variable));
+            guard.add(ASMUtils.pushInt(value));
+            guard.add(new InsnNode(IXOR));
+            guard.add(new InsnNode(IOR));
+
+            method.insns().insertBefore(jump, guard);
+        }
     }
 
     private void createFlowConfuser(Context context, InsnList list, int variable, int predecessorValue, int value) {

@@ -90,21 +90,27 @@ public class MethodParameterChangerTransformer extends Transformer {
     }
 
     private boolean skipMethod(ReferenceGraph graph, Context context, JClass clazz, JMethod method) {
-        if (method.owner().isLibMethod(method)) return true;
+        if (method.owner().isLibMethod(method)) 
+            return true;
 
         String newDesc = method.desc().replace(")", "I)");
         boolean wouldCollide = clazz.methods().stream()
                 .filter(m -> m != method)
                 .filter(m -> m.name().equals(method.name()))
                 .anyMatch(m -> m.desc().equals(newDesc));
-        if (wouldCollide) return true;
+        if (wouldCollide) 
+            return true;
 
         for (var member : impactedClasses(context, clazz, method)) {
             var m = member.findMethod(method.name(), method.desc()).orElse(method);
-            if (Exclusions.PARAMETER_CHANGE.excluded(member)) return true;
-            if (Exclusions.PARAMETER_CHANGE.excluded(member, m)) return true;
-            if (cantEditMethod(member, m)) return true;
-            if (graph.refs(m).stream().anyMatch(MethodReference::cantEdit)) return true;
+            if (Exclusions.PARAMETER_CHANGE.excluded(member)) 
+                return true;
+            if (Exclusions.PARAMETER_CHANGE.excluded(member, m)) 
+                return true;
+            if (cantEditMethod(member, m)) 
+                return true;
+            if (graph.refs(m).stream().anyMatch(MethodReference::cantEdit)) 
+                return true;
         }
 
         return false;
