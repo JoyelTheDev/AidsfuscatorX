@@ -43,7 +43,6 @@ public final class TransformerOrder {
             new LongEncryptTransformer(),
             new StringEncryptTransformer(),
             new VirtualizerTransformer(),
-            new InvokeDynamicConstantTransformer(),
             new FlowIntsTransformer(),
             
             new OpaquePredicateTransformer(),

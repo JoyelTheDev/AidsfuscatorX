@@ -86,13 +86,6 @@
       "translateConcat": true,
       "minLength": 2
     },
-    "InvokeDynamicConstantTransformer": {
-      "enabled": true,
-      "constants": true,
-      "classes": true,
-      "math": true,
-      "skipSmallConstants": false
-    },
     "FlowIntsTransformer": {
       "enabled": true,
       "obfuscateLongs": true,

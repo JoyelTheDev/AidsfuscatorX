@@ -42,7 +42,6 @@ public enum Exclusions {
     HASH_INTEGRITY("hashIntegrity", true, false, true),
     SHUFFLE_MEMBERS("shuffleMembers", true, false, false),
     VIRTUALIZER("virtualizer", true, false, true),
-    INVOKEDYNAMIC_CONSTANTS("indyConstants", true, false, true),
     METHODHANDLE_OBFUSCATE("methodHandleObfuscate", true, false, true),
 
     ;
