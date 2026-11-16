@@ -63,7 +63,7 @@
         <dependency>
             <groupId>io.github.kusoroadeolu</groupId>
             <artifactId>clique-core</artifactId>
-            <version>4.0.3</version>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
