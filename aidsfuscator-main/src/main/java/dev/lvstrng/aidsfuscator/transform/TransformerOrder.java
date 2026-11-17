@@ -39,6 +39,7 @@ public final class TransformerOrder {
             new MethodParameterChangerTransformer(),
             new MethodParameterObfuscationTransformer(),
             
+            new ConstantDynamicTransformer(),
             new IntegerEncryptTransformer(),
             new LongEncryptTransformer(),
             new StringEncryptTransformer(),

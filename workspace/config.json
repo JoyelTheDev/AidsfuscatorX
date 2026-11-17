@@ -70,6 +70,14 @@
     "MethodParameterObfuscationTransformer": {
       "enabled": false
     },
+    "ConstantDynamicTransformer": {
+      "enabled": true,
+      "encryptIntegers": true,
+      "encryptLongs": true,
+      "encryptStrings": true,
+      "excludeLowSignificant": true,
+      "minStringLength": 1
+    },
     "FixConstantsTransformer": {
       "enabled": true
     },
