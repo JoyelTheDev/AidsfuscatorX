@@ -45,7 +45,6 @@ public class TestMain {
                 new ConstantsFixTransformer(),
                 new IntegerEncryptTransformer(),
                 new StringEncryptTransformer(),
-                new InvokeDynamicConstantTransformer(),
                 new FlowIntsTransformer(),
 
                 new ControlFlowFlatteningTransformer(),
